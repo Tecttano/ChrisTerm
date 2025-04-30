@@ -1,9 +1,22 @@
 #!/bin/bash
 
-# This script installs Wezterm terminal and sets it up as default
+# Wezterm Terminal Setup Script
+# This script installs Wezterm terminal, sets it as default, and creates a basic configuration
 
 echo "STEP 1"
 echo "==== INSTALLING WEZTERM ===="
+
+# Install prerequisites
+echo "Installing prerequisites..."
+sudo apt update && sudo apt install -y curl gpg apt-transport-https ca-certificates
+
+# Error check
+if [ $? -ne 0 ]; then
+    echo "Failed to install prerequisites. Exiting."
+    exit 1
+fi
+
+# Adding repository
 echo "Adding Wezterm repository..."
 
 # Create keyrings directory if it doesn't exist
