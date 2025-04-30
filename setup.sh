@@ -1,37 +1,62 @@
 #!/bin/bash
 
-# This script installs my preferred terminal setup on Debian-based systems
-echo "1. Save this script to a file (e.g., 'setup-wezterm.sh')"
-echo "2. Make it executable with: chmod +x setup-wezterm.sh"
-echo "3. Run it with: ./setup-wezterm.sh"
+# This script installs Wezterm terminal and sets it up as default
 
 echo "STEP 1"
 echo "==== INSTALLING WEZTERM ===="
-echo "Updating package repositories"
+echo "Adding Wezterm repository..."
+
+# Create keyrings directory if it doesn't exist
+sudo mkdir -p /etc/apt/keyrings
+
+# Download and add the GPG key
+echo "Adding GPG key..."
+curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/wezterm-fury.gpg
+
+# Error check
+if [ $? -ne 0 ]; then
+    echo "Failed to add GPG key. Exiting."
+    exit 1
+fi
+
+# Add the repository to sources list
+echo "Adding repository to sources list..."
+echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
+
+# Error check
+if [ $? -ne 0 ]; then
+    echo "Failed to add repository to sources list. Exiting."
+    exit 1
+fi
+
+# Update package list
+echo "Updating package repositories..."
 sudo apt update
 
 # Error check
 if [ $? -ne 0 ]; then
-    echo "Failed to update package repositories. Exiting"
+    echo "Failed to update package repositories. Exiting."
     exit 1
 fi
 
-echo "Installing Wezterm. . ."
+# Install Wezterm
+echo "Installing Wezterm..."
 sudo apt install -y wezterm
 
 # Error check
 if [ $? -ne 0 ]; then
-    echo "Failed to update package repositories. Exiting"
+    echo "Failed to install Wezterm. Exiting."
     exit 1
 fi
 
-# Verify install
+# Verify installation
 echo "Checking if Wezterm is installed..."
 if command -v wezterm &> /dev/null; then
     echo "Wezterm is installed at: $(which wezterm)"
     echo "Version: $(wezterm --version)"
 else
-    echo "Wezterm is not installed"
+    echo "Wezterm is not installed."
+    exit 1
 fi
 
 echo ""
@@ -50,10 +75,10 @@ if command -v update-alternatives &> /dev/null; then
     if [ $? -ne 0 ]; then
         echo "Failed to set Wezterm as default using update-alternatives."
     else
-        echo "Successfully set Wezterm as default terminal via update-alternatives"
+        echo "Successfully set Wezterm as default terminal via update-alternatives."
     fi
 else
-    echo "update-alternatives command not found, skipping this method"
+    echo "update-alternatives command not found, skipping this method."
 fi
 
 # Method 2: Using xdg-mime (works in many desktop environments)
@@ -64,10 +89,10 @@ if command -v xdg-mime &> /dev/null; then
     if [ $? -ne 0 ]; then
         echo "Failed to set Wezterm as default using xdg-mime."
     else
-        echo "Successfully set Wezterm as default terminal handler via xdg-mime"
+        echo "Successfully set Wezterm as default terminal handler via xdg-mime."
     fi
 else
-    echo "xdg-mime command not found, skipping this method"
+    echo "xdg-mime command not found, skipping this method."
 fi
 
 echo ""
