@@ -1,12 +1,13 @@
-1. Install Zsh
-2. Set Zsh as default shell
-3. Install Oh My Zsh
-4. Install Powerlevel10k for Zsh
-5. Install Nerd Fonts
-6. Install some useful Zsh plugins
-7. Apply edits to ~/.zshrc
-8. Custom aliases and fuctions, think git, cls, desk, etc
-9. Setup VIM
-10. Potential Terminal Emulators
-11. This is the boring one though
-12. Unixpron
+Order of Operations:
+Install Kitty Terminal
+Install Zsh
+Set Zsh as Default Shell
+Install Nerd Fonts
+Install Oh My Zsh
+Install Powerlevel10k Theme
+Install Zsh Plugins
+Set Up Vim
+Configure Kitty Terminal
+Create Zsh Configuration
+Create Powerlevel10k Configuration
+Print Completion Message
