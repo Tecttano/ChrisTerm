@@ -8,7 +8,7 @@ echo "==== INSTALLING WEZTERM ===="
 
 # Install prerequisites
 echo "Installing prerequisites..."
-sudo apt update && sudo apt install -y curl gpg apt-transport-https ca-certificates
+sudo apt update && sudo apt install -y curl wget
 
 # Error check
 if [ $? -ne 0 ]; then
@@ -16,45 +16,19 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Adding repository
-echo "Adding Wezterm repository..."
-
-# Create keyrings directory if it doesn't exist
-sudo mkdir -p /etc/apt/keyrings
-
-# Download and add the GPG key
-echo "Adding GPG key..."
-curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/wezterm-fury.gpg
+# Download Wezterm .deb package
+echo "Downloading Wezterm package..."
+wget -O wezterm.deb https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/wezterm-20240203-110809-5046fc22.Ubuntu22.04.deb
 
 # Error check
 if [ $? -ne 0 ]; then
-    echo "Failed to add GPG key. Exiting."
+    echo "Failed to download Wezterm package. Exiting."
     exit 1
 fi
 
-# Add the repository to sources list
-echo "Adding repository to sources list..."
-echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
-
-# Error check
-if [ $? -ne 0 ]; then
-    echo "Failed to add repository to sources list. Exiting."
-    exit 1
-fi
-
-# Update package list
-echo "Updating package repositories..."
-sudo apt update
-
-# Error check
-if [ $? -ne 0 ]; then
-    echo "Failed to update package repositories. Exiting."
-    exit 1
-fi
-
-# Install Wezterm
+# Install Wezterm from the .deb package
 echo "Installing Wezterm..."
-sudo apt install -y wezterm
+sudo apt install -y ./wezterm.deb
 
 # Error check
 if [ $? -ne 0 ]; then
